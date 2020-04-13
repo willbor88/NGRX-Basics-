@@ -16,5 +16,6 @@ export function shoppingListReducer(state = initialState, action:ShoppingListAct
         ...state,//Operador spread:copida las propiedades del array anterior y añade nuevas a un nuveo array
         ingredients: [...state.ingredients, action.payload]//solo actualizamos la propiedad que quiero cambiar y añadimos esa propiedad del metoda de la clase Action
       };
+     default: return state//Mostrar el estado actual al usar select al cargar la pagina antes de añadir otro ingrediente
   }
 }
