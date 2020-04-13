@@ -5,6 +5,8 @@ export const ADD_INGREDIENT = 'ADD_INGREDIENT' //creamos una variable que deberi
 
 export  class AddIngridient  implements Action{//Generamos el nombre de nuestra accion e implementamos la intervaz Action
 readonly type= ADD_INGREDIENT //es el identificado da la accion, readonly no permite cambiar este tipo desde otro logar
-payload:Ingredient
+
+//Permite recibir un argumento publico desde otro componente
+constructor(public payload:Ingredient){}
 
 }
