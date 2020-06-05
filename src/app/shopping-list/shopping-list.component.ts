@@ -27,8 +27,8 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 //Consumir data del estado global(Store)
-//Select devuelve un observable 
-    this.someIngredients= this.store.select('shoppingList')//Reducer de clarado en el app.module.ts
+//Select devuelve un observable
+    this.someIngredients= this.store.select('shoppingList')//Recibe la data que retorna la funcion Reducer:En este caso un array.
     // this.ingredients = this.slService.getIngredients();
     // this.subscription = this.slService.ingredientsChanged.subscribe(
     //   (ingredients: Ingredient[]) => {

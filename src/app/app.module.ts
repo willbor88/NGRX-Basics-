@@ -18,7 +18,7 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     AppRoutingModule,
     SharedModule,
     CoreModule,
-    StoreModule.forRoot({shoppingList:shoppingListReducer}) //pasamos un objeto para declarar los reducer
+    StoreModule.forRoot({shoppingList:shoppingListReducer}) //pasamos un objeto para declarar los reducer.Nombre reducer:Ruta reducer
   ],
   bootstrap: [AppComponent],
   // providers: [LoggingService]
