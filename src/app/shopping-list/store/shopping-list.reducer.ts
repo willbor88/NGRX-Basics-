@@ -1,26 +1,90 @@
-import { Ingredient } from '../../shared/ingredient.model';
-import * as ShoppingListActions from "../store/shopping-list.actions";
+import { Ingredient } from "../../shared/ingredient.model";
+import * as ShoppingListActions from "./shopping-list.actions";
 
-//Estado inicial
-const initialState = {
-  ingredients: [
-    new Ingredient('Apples', 5),
-    new Ingredient('Tomatoes', 20),
-    new Ingredient('Queso', 4),
-  ]
+// Estrucura del Estado global
+export interface State{
+  ingredients:Ingredient[],
+  editedIngredient:Ingredient,
+  editedIngredientIndex:number
+}
+
+//Iniciamos el state con algunos valores
+const initialState:State = {
+  ingredients: [new Ingredient("Apples", 5),new Ingredient("Tomatoes", 20),new Ingredient("Queso", 4)],
+  editedIngredient:null,//Asignamos valores no tipos de datos
+  editedIngredientIndex:-1
 };
 
-
-//Copiamos el estado actual de la variable state  en otro objeto y le pasamos el metodo de la clase action
-//state tendra el estado anterio por primera vez que es inicialidado
-export function shoppingListReducer(state = initialState, action:ShoppingListActions.AddIngridient ) {//ShoppingListActions es nuestra clase Acction
-  switch (action.type) {//validar  que tipo de accion se realiza
-    case ShoppingListActions.ADD_INGREDIENT: // Usar la accion "ADD_INGREDIENT" usando la  constante del archivo action
-    //state.ingredients.push()NO SE HACE: NUNCA SE ACTUALIZA EL ESTADO ACTUAL O ANTERIOR Directamente
-      return {//RETORMANOS EL NUEVO ESTADO
-        ...state,//copida las propiedades del array anterior y añade nuevas a un nuveo array
-        ingredients: [...state.ingredients, action.payload]//solo actualizamos las propiedad del objeto state que quiero cambiar y añadimos la propiedad payload del clase Action
+//importamos las acciones del componente importado ShoppingListActions y el objeto type shoppingListActionss
+export function shoppingListReducer(
+  state :State = initialState,//Copiamos el estado global y lo definomos con una interfaz
+  action: ShoppingListActions.shoppingListActionss
+) {
+  switch (action.type) {
+    case ShoppingListActions.ADD_INGREDIENT:
+      return {//Devolvemos un objeto porque actualizaremos un objeto del Store
+        //Creo un objeto  copionado antes las propiedades  del state y lo modifico para retornarlo
+        ...state,
+        ingredients: [...state.ingredients, action.payload],
       };
-     default: return state//Asingar el estado inicial y devolverlo sin cambios antes añadir nuevos elementos
+
+    case ShoppingListActions.ADD_INGREDIENTS:
+      return {
+        ...state,
+        ingredients: [...state.ingredients, ...action.payload], //Copiamos el array payload de la clase ADD_INGREDIENTS
+      };
+
+    case ShoppingListActions.UPDATE_INGREDIENT:
+      const ingredient = state.ingredients[state.editedIngredientIndex];
+      const UpdateIngredient = {
+        //Actualizo solo un objeto ingrediente con los nuevas propiedades enviadas desde el Dispatch
+        //...ingredient,
+        ...action.payload.newIngredient, //Copio las propiedades del objeto  Ingrediente recibido desde la clase UpdateIngrediente y las añado al objeto UpdateIngredient
+      };
+
+      const UptdatIngredients = [...state.ingredients];
+      UptdatIngredients[state.editedIngredientIndex] = UpdateIngredient;
+
+      return {
+        ...state,
+        ingredients: UptdatIngredients,
+        editedIngredientIndex:-1,//Detener la adicion
+        editedIngredient:null//Detener la adicion
+      };
+
+    case ShoppingListActions.DELETE_INGREDIENT:
+      //   const index= action.payload
+
+      // const deleteIngredients=[...state.ingredients].splice(index,1)
+      //   return{
+      //     ...state,
+      //     ingredients:deleteIngredients
+
+      //   }
+      return {
+        ...state,
+        ingredients: state.ingredients.filter((ingred, idex) => {
+          //Con filter recorremos toda el array y generamos un nuvevo array con los elementos que  retronen true, los elemtnso false no son incluidos
+          return idex != state.editedIngredientIndex;
+        }),
+        editedIngredientIndex:-1,
+        editedIngredient:null
+      }
+
+      case ShoppingListActions.START_EDIT:
+    return  {
+        ... state,
+        editedIngredientIndex:action.payload,
+        editedIngredient:{...state.ingredients[action.payload]}//NO actualizar directamente el array sino copiar las propiedades del objeto ingrediente:LOs objeto y array son elementos referenciado
+      }
+        case ShoppingListActions.STOP_EDIT:
+          return{
+            ...state,
+            editedIngredientIndex:-1,
+            editedIngredient:null
+          }
+
+    default:
+      return state; //El retorn sera recibido por el Store
   }
 }

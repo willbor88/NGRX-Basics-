@@ -7,8 +7,9 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
-
+// import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+// import { authReducer } from './auth/auth.reducer';
+import *  as fromApp from './store/app.reducer'
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -18,9 +19,9 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     AppRoutingModule,
     SharedModule,
     CoreModule,
-    StoreModule.forRoot({shoppingList:shoppingListReducer}) //pasamos un objeto para declarar los reducer.Nombre reducer:Ruta reducer
+    StoreModule.forRoot(fromApp.appReducer) // Apuntamos al  reducer global
   ],
   bootstrap: [AppComponent],
-  // providers: [LoggingService]
+  // providers: [LoggingService]FUNCIONAL
 })
 export class AppModule {}
